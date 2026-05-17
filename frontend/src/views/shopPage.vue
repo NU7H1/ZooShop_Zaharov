@@ -31,19 +31,21 @@
 </template>
 
 <script>
-import { filterStore } from '../store/filterStore';          
-import allProducts from '../assets/products.json';      
+import { filterStore } from '../store/filterStore';   // <- ИСПРАВЛЕНО
+import allProducts from '../assets/products.json';    // <- путь к products.json в src/assets
 
 export default {
   name: 'shopPage',
   data() {
     return {
-      selectedCategory: null,
       snackbar: false,
       allProducts: allProducts,
     };
   },
   computed: {
+    selectedCategory() {
+      return this.$route.query.category || 'common';
+    },
     filteredProducts() {
       let result = this.allProducts;
       if (this.selectedCategory === 'common') {
@@ -60,12 +62,6 @@ export default {
         result = result.filter(p => p.price <= filterStore.priceMax);
       }
       return result;
-    },
-  },
-  watch: {
-    '$route.query.category': {
-      immediate: true,
-      handler(newVal) { this.selectedCategory = newVal || null; },
     },
   },
   methods: {
