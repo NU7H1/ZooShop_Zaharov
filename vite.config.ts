@@ -5,7 +5,7 @@ import path from 'path';
 export default defineConfig({
   root: path.resolve(__dirname, 'frontend'),
   server: {
-    port: 3011,
+    port: 3020,
     open: true,
   },
   build: {
