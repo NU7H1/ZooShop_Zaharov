@@ -4,9 +4,7 @@
 
     <div class="d-flex align-center">
       <v-icon color="#FF8C00">mdi-store</v-icon>
-      <v-toolbar-title class="ml-2" style="color: white"
-        >ЗооМаркет</v-toolbar-title
-      >
+      <v-toolbar-title class="ml-2 text-white">ЗооМаркет</v-toolbar-title>
     </div>
 
     <v-spacer />
@@ -23,20 +21,19 @@
       bg-color="white"
     />
 
-    <v-btn icon @click="showCart = !showCart" style="color: white">
-      <v-badge color="#FF8C00" content="3" overlap>
+    <v-btn icon style="color: white" class="mr-2" @click="openFilterDrawer">
+      <v-icon>mdi-tune</v-icon>
+    </v-btn>
+
+    <v-btn icon style="color: white">
+      <v-badge color="#FF8C00" :content="cartItemsCount" overlap>
         <v-icon>mdi-cart-outline</v-icon>
       </v-badge>
     </v-btn>
 
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn
-          v-bind="props"
-          variant="text"
-          class="text-none"
-          style="color: white"
-        >
+        <v-btn v-bind="props" variant="text" class="text-none text-white">
           <v-icon left color="#FF8C00">mdi-account-circle</v-icon>
           Захаров С.А.
         </v-btn>
@@ -46,17 +43,25 @@
         <v-list-item prepend-icon="mdi-logout" title="Выйти" />
       </v-list>
     </v-menu>
+
+    <FilterDrawer ref="filterDrawer" />
   </v-app-bar>
 </template>
 
 <script>
+import FilterDrawer from './FilterDrawer.vue';
+
 export default {
   name: 'Navbar',
+  components: { FilterDrawer },
   emits: ['toggle-sidebar'],
   data() {
-    return {
-      showCart: false,
-    };
+    return { cartItemsCount: 0 };
+  },
+  methods: {
+    openFilterDrawer() {
+      this.$refs.filterDrawer.open();
+    },
   },
 };
 </script>

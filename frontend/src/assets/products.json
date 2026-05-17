@@ -1,0 +1,244 @@
+[
+    {
+      "id": 1,
+      "name": "Корм для кошек \"Премиум\"",
+      "description": "Сухой корм с курицей, 2 кг",
+      "price": 1250,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Cat+Food"
+    },
+    {
+      "id": 2,
+      "name": "Игрушка-мышка для кошек",
+      "description": "3 шт, с кошачьей мятой",
+      "price": 350,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Cat+Toy"
+    },
+    {
+      "id": 3,
+      "name": "Когтеточка-домик",
+      "description": "Компактная, 45x45 см",
+      "price": 2890,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Scratcher"
+    },
+    {
+      "id": 4,
+      "name": "Наполнитель для лотка",
+      "description": "Комкующийся, 10 л",
+      "price": 590,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Litter"
+    },
+    {
+      "id": 5,
+      "name": "Лоток для кошек закрытый",
+      "description": "С дверцей и фильтром",
+      "price": 2150,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Litter+Box"
+    },
+    {
+      "id": 6,
+      "name": "Расчёска для кошек",
+      "description": "Металлическая, с антистатиком",
+      "price": 320,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Comb"
+    },
+    {
+      "id": 7,
+      "name": "Когтерез для кошек",
+      "description": "С ограничителем глубины",
+      "price": 490,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Nail+Clipper"
+    },
+    {
+      "id": 8,
+      "name": "Шлейка для кошек",
+      "description": "Нейлоновая, регулируемая",
+      "price": 680,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Cat+Harness"
+    },
+    {
+      "id": 9,
+      "name": "Кошачья мята",
+      "description": "Спрей для игрушек",
+      "price": 250,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Catnip"
+    },
+    {
+      "id": 10,
+      "name": "Лежанка для кошек",
+      "description": "Круглая, мягкая, 40 см",
+      "price": 1350,
+      "category": "cat",
+      "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Cat+Bed"
+    },
+  
+    {
+      "id": 11,
+      "name": "Корм для собак \"Энерджи\"",
+      "description": "Сухой корм с ягнёнком, 3 кг",
+      "price": 1890,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Dog+Food"
+    },
+    {
+      "id": 12,
+      "name": "Мячик для собак",
+      "description": "Прорезиненный, светится в темноте",
+      "price": 420,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Dog+Ball"
+    },
+    {
+      "id": 13,
+      "name": "Шлейка для собак",
+      "description": "Регулируемая, размер M",
+      "price": 750,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Harness"
+    },
+    {
+      "id": 14,
+      "name": "Поводок-рулетка для собак",
+      "description": "Длина 5 м, для средних пород",
+      "price": 890,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Leash"
+    },
+    {
+      "id": 15,
+      "name": "Миска для собак с подставкой",
+      "description": "Нержавеющая сталь, 1,5 л",
+      "price": 1200,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Bowl"
+    },
+    {
+      "id": 16,
+      "name": "Игрушка-канат для собак",
+      "description": "Хлопок, для активных игр",
+      "price": 380,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Rope+Toy"
+    },
+    {
+      "id": 17,
+      "name": "Дождевик для собак",
+      "description": "Размер M, непромокаемый",
+      "price": 950,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Raincoat"
+    },
+    {
+      "id": 18,
+      "name": "Сумка-переноска для собак",
+      "description": "До 5 кг, вентиляция",
+      "price": 2650,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Carrier"
+    },
+    {
+      "id": 19,
+      "name": "Витамины для суставов собак",
+      "description": "Глюкозамин, 120 таблеток",
+      "price": 1350,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Dog+Vitamins"
+    },
+    {
+      "id": 20,
+      "name": "Фрисби для собак",
+      "description": "Мягкий силикон, не травмирует зубы",
+      "price": 490,
+      "category": "dog",
+      "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Frisbee"
+    },
+  
+    {
+      "id": 21,
+      "name": "Витамины для шерсти (для кошек и собак)",
+      "description": "Биотин + таурин, 60 таблеток",
+      "price": 480,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Vitamins"
+    },
+    {
+      "id": 22,
+      "name": "Глистогонное средство",
+      "description": "Таблетки для кошек и собак, 3 шт",
+      "price": 320,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Dewormer"
+    },
+    {
+      "id": 23,
+      "name": "Шампунь гипоаллергенный",
+      "description": "Для чувствительной кожи, 250 мл",
+      "price": 590,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Shampoo"
+    },
+    {
+      "id": 24,
+      "name": "Клещевой спрей",
+      "description": "Защита от блох и клещей",
+      "price": 420,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Tick+Spray"
+    },
+    {
+      "id": 25,
+      "name": "Когтерез универсальный",
+      "description": "Для кошек и собак малых пород",
+      "price": 390,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Nail+Clipper"
+    },
+    {
+      "id": 26,
+      "name": "Поилка автоматическая",
+      "description": "С фильтром, 1,5 л",
+      "price": 1450,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Water+Fountain"
+    },
+    {
+      "id": 27,
+      "name": "Диспенсер для лакомств",
+      "description": "Интерактивный, для развития интеллекта",
+      "price": 670,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Treat+Dispenser"
+    },
+    {
+      "id": 28,
+      "name": "Массажная щётка для шерсти",
+      "description": "Двусторонняя, удаляет подшёрсток",
+      "price": 530,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Brush"
+    },
+    {
+      "id": 29,
+      "name": "Зубная паста для животных",
+      "description": "С вкусом печени, 70 г",
+      "price": 380,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Toothpaste"
+    },
+    {
+      "id": 30,
+      "name": "Впитывающие пелёнки",
+      "description": "10 шт, 60x60 см",
+      "price": 450,
+      "category": "common",
+      "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Pads"
+    }
+  ]
