@@ -2,7 +2,7 @@
   "name": "express-simple-starter",
   "private": true,
   "scripts": {
-    "start": "node ./server/index.js",
+    "start": "node ./index.js",
     "front-build": "vite build",
     "dev": "vite"
   },
@@ -11,7 +11,7 @@
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
-    "axios": "^1.15.0",
+    "axios": "^1.16.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

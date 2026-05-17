@@ -1,15 +1,21 @@
+require('dotenv').config();
 const express = require('express');
-const { resolve } = require('path');
+const cors = require('cors');
+
+const UserController = require('./server/controllers/UserController');
+const LoginController = require('./server/controllers/LoginController');
+const OrderController = require('./server/controllers/OrderController');
 
 const app = express();
-const port = 3020;
+const port = 3021;
 
-app.use(express.static('static'));
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
-});
+app.use('/api/users', UserController);
+app.use('/api/login', LoginController);
+app.use('/api/orders', OrderController);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Backend running at http://localhost:${port}`);
 });
