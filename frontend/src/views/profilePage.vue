@@ -5,23 +5,20 @@
       <h2 class="text-h5 font-weight-bold">Профиль</h2>
     </div>
 
-    <!-- Инфо о пользователе -->
     <v-card variant="outlined" style="border-color: #FF8C00;" rounded="lg" class="mb-6 pa-4">
       <div class="d-flex align-center">
         <v-avatar color="#FF8C00" size="56" class="mr-4">
           <v-icon size="32" color="white">mdi-account</v-icon>
         </v-avatar>
         <div>
-          <div class="text-h6 font-weight-bold">{{ currentUser?.name }}</div>
-          <div class="text-body-2 text-grey">{{ currentUser?.login }}</div>
+          <div class="text-h6 font-weight-bold">{{ userName }}</div>
           <v-chip size="x-small" color="#FF8C00" variant="tonal" class="mt-1">
-            {{ currentUser?.role === 'admin' ? 'Администратор' : 'Клиент' }}
+            {{ userRole === 'admin' ? 'Администратор' : 'Клиент' }}
           </v-chip>
         </div>
       </div>
     </v-card>
 
-    <!-- Табы -->
     <v-tabs v-model="tab" color="#FF8C00" class="mb-4">
       <v-tab value="orders">
         <v-icon start>mdi-package-variant</v-icon>
@@ -33,7 +30,6 @@
       </v-tab>
     </v-tabs>
 
-    <!-- Заказы -->
     <div v-if="tab === 'orders'">
       <div v-if="loading" class="text-center py-10">
         <v-progress-circular indeterminate color="#FF8C00" />
@@ -55,7 +51,7 @@
         <v-card-text>
           <div class="d-flex align-center justify-space-between mb-3">
             <div>
-              <div class="text-body-2 text-grey">Заказ #{{ order.id }}</div>
+              <div class="text-body-2 font-weight-bold">Заказ #{{ order.id }}</div>
               <div class="text-caption text-grey-darken-1">
                 {{ formatDate(order.createdAt) }}
               </div>
@@ -86,7 +82,6 @@
       </v-card>
     </div>
 
-    <!-- Избранное -->
     <div v-if="tab === 'favorites'">
       <div v-if="favorites.length === 0" class="text-center py-10">
         <v-icon size="64" color="grey-lighten-1">mdi-heart-outline</v-icon>
@@ -108,12 +103,12 @@
               <div class="text-body-2 text-grey-darken-1 mb-1">{{ product.description }}</div>
               <div class="font-weight-bold" style="color: #FF8C00;">{{ product.price }} ₽</div>
             </v-card-text>
-            <v-card-actions class="pt-0 pb-3 d-flex" style="gap: 8px;">
-              <v-btn color="#FF8C00" variant="flat" flex="1" style="flex:1" @click="addToCartLocal(product)">
-                <v-icon left size="16">mdi-cart-plus</v-icon>
+            <v-card-actions class="pt-0 pb-3" style="gap: 8px;">
+              <v-btn color="#FF8C00" variant="flat" style="flex:1" @click="addToCartLocal(product)">
+                <v-icon start size="16">mdi-cart-plus</v-icon>
                 В корзину
               </v-btn>
-              <v-btn color="red" variant="tonal" icon @click="removeFromFavorites(product.id)">
+              <v-btn color="red" variant="tonal" icon @click="removeFavorite(product.id)">
                 <v-icon size="18">mdi-heart-off</v-icon>
               </v-btn>
             </v-card-actions>
@@ -122,14 +117,16 @@
       </v-row>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">{{ snackbarText }}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">
+      {{ snackbarText }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 export default {
   name: 'profilePage',
-  inject: ['getUser', 'addToCart', 'getFavorites', 'removeFromFavorites'],
+  inject: ['getFavorites', 'removeFromFavorites', 'addToCart', 'orderService'],
   data() {
     return {
       tab: 'orders',
@@ -137,12 +134,11 @@ export default {
       loading: false,
       snackbar: false,
       snackbarText: '',
+      userName: sessionStorage.getItem('userName') || '',
+      userRole: sessionStorage.getItem('userRole') || 'client',
     };
   },
   computed: {
-    currentUser() {
-      return this.getUser();
-    },
     favorites() {
       return this.getFavorites();
     },
@@ -154,9 +150,9 @@ export default {
     async loadOrders() {
       this.loading = true;
       try {
-        const user = this.getUser();
-        const res = await fetch(`/api/orders?userId=${user.id}&role=${user.role}`);
-        this.orders = await res.json();
+        const userId = sessionStorage.getItem('userId');
+        const role = sessionStorage.getItem('userRole');
+        this.orders = await this.orderService.getOrders(userId, role);
       } catch (e) {
         console.error(e);
       } finally {
@@ -168,7 +164,7 @@ export default {
       this.snackbarText = `«${product.name}» добавлен в корзину`;
       this.snackbar = true;
     },
-    removeFromFavorites(id) {
+    removeFavorite(id) {
       this.removeFromFavorites(id);
     },
     formatDate(iso) {

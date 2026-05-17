@@ -26,46 +26,55 @@
       @keydown.enter="goToShop"
     />
 
-    <v-btn icon style="color: white" class="mr-2">
-      <v-icon>mdi-heart-outline</v-icon>
+    <!-- Избранное -->
+    <v-btn icon style="color: white;" class="mr-1" @click="favDrawer = true">
+      <v-badge :content="favoritesCount" :model-value="favoritesCount > 0" color="#FF8C00" overlap>
+        <v-icon>mdi-heart-outline</v-icon>
+      </v-badge>
     </v-btn>
 
-    <v-btn icon style="color: white" @click="cartDrawer = true">
+    <!-- Корзина -->
+    <v-btn icon style="color: white;" class="mr-1" @click="cartDrawer = true">
       <v-badge :content="cartCount" :model-value="cartCount > 0" color="#FF8C00" overlap>
         <v-icon>mdi-cart-outline</v-icon>
       </v-badge>
     </v-btn>
 
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" variant="text" class="text-none text-white">
-          <v-icon left color="#FF8C00">mdi-account-circle</v-icon>
-          {{ currentUser?.name }}
-          <v-chip v-if="currentUser?.role === 'admin'" size="x-small" color="#FF8C00" class="ml-1">
-            Admin
-          </v-chip>
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item prepend-icon="mdi-account" title="Профиль" to="/profile" />
-        <v-list-item
-          v-if="currentUser?.role === 'admin'"
-          prepend-icon="mdi-shield-crown"
-          title="Панель админа"
-          to="/admin"
-        />
-        <v-divider />
-        <v-list-item prepend-icon="mdi-logout" title="Выйти" @click="logout" />
-      </v-list>
-    </v-menu>
+    <!-- Меню пользователя -->
+    <div v-if="isLoggedIn">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" variant="text" class="text-none text-white">
+            <v-icon left color="#FF8C00">mdi-account-circle</v-icon>
+            {{ userName }}
+            <v-chip v-if="userRole === 'admin'" size="x-small" color="#FF8C00" class="ml-1">
+              Admin
+            </v-chip>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item prepend-icon="mdi-account" title="Профиль" to="/profile" />
+          <v-list-item
+            v-if="userRole === 'admin'"
+            prepend-icon="mdi-shield-crown"
+            title="Панель админа"
+            to="/admin"
+          />
+          <v-divider />
+          <v-list-item prepend-icon="mdi-logout" title="Выйти" @click="logout" />
+        </v-list>
+      </v-menu>
+    </div>
 
-    <!-- Панель корзины -->
-    <v-navigation-drawer
-      v-model="cartDrawer"
-      location="right"
-      temporary
-      width="340"
-    >
+    <v-btn v-else variant="text" class="text-white" @click="$refs.loginDialog.open()">
+      <v-icon left>mdi-login</v-icon>
+      Войти
+    </v-btn>
+
+    <LoginDialog ref="loginDialog" @login-success="onLoginSuccess" />
+
+    <!-- ===== ПАНЕЛЬ КОРЗИНЫ ===== -->
+    <v-navigation-drawer v-model="cartDrawer" location="right" temporary width="340">
       <div class="pa-4">
         <div class="d-flex align-center justify-space-between mb-4">
           <span class="text-h6 font-weight-bold">
@@ -79,13 +88,11 @@
 
         <v-divider class="mb-4" />
 
-        <!-- Пусто -->
         <div v-if="cartItems.length === 0" class="text-center py-10">
           <v-icon size="64" color="grey-lighten-1">mdi-cart-off</v-icon>
           <div class="text-body-1 text-grey mt-3">Корзина пуста</div>
         </div>
 
-        <!-- Список товаров -->
         <div v-else>
           <div
             v-for="item in cartItems"
@@ -113,8 +120,15 @@
             <span class="text-h6 font-weight-bold" style="color: #FF8C00">{{ totalPrice }} ₽</span>
           </div>
 
-          <v-btn color="#FF8C00" variant="flat" block size="large" @click="placeOrder">
-            <v-icon left>mdi-credit-card-outline</v-icon>
+          <v-btn
+            color="#FF8C00"
+            variant="flat"
+            block
+            size="large"
+            :loading="orderLoading"
+            @click="placeOrder"
+          >
+            <v-icon start>mdi-credit-card-outline</v-icon>
             Оформить заказ
           </v-btn>
           <v-btn variant="text" color="grey" block class="mt-1" size="small" @click="clearCart">
@@ -124,18 +138,63 @@
       </div>
     </v-navigation-drawer>
 
-    <!-- Снэкбар -->
-    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">
-      {{ snackbarText }}
-    </v-snackbar>
+    <!-- ===== ПАНЕЛЬ ИЗБРАННОГО ===== -->
+    <v-navigation-drawer v-model="favDrawer" location="right" temporary width="340">
+      <div class="pa-4">
+        <div class="d-flex align-center justify-space-between mb-4">
+          <span class="text-h6 font-weight-bold">
+            <v-icon color="red" class="mr-1">mdi-heart</v-icon>
+            Избранное
+          </span>
+          <v-btn icon size="small" variant="text" @click="favDrawer = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
+
+        <v-divider class="mb-4" />
+
+        <div v-if="favoriteItems.length === 0" class="text-center py-10">
+          <v-icon size="64" color="grey-lighten-1">mdi-heart-off</v-icon>
+          <div class="text-body-1 text-grey mt-3">Избранное пусто</div>
+        </div>
+
+        <div v-else>
+          <div
+            v-for="item in favoriteItems"
+            :key="item.id"
+            class="d-flex align-center mb-3 pa-2 rounded-lg"
+            style="border: 1px solid #FFE0B2;"
+          >
+            <v-img :src="item.image" width="56" height="56" cover rounded="lg" class="flex-shrink-0" />
+            <div class="ml-3 flex-grow-1 overflow-hidden">
+              <div class="text-body-2 font-weight-bold text-black text-truncate">{{ item.name }}</div>
+              <div class="text-body-2 font-weight-bold" style="color: #FF8C00">{{ item.price }} ₽</div>
+            </div>
+            <div class="d-flex flex-column" style="gap: 4px;">
+              <v-btn icon size="x-small" variant="text" color="#FF8C00" @click="addToCartFromFav(item)">
+                <v-icon size="16">mdi-cart-plus</v-icon>
+              </v-btn>
+              <v-btn icon size="x-small" variant="text" color="red" @click="removeFav(item.id)">
+                <v-icon size="16">mdi-close</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-navigation-drawer>
+
+    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">{{ snackbarText }}</v-snackbar>
   </v-app-bar>
 </template>
 
 <script>
+import LoginDialog from './LoginDialog.vue';
+
 export default {
   name: 'Navbar',
+  components: { LoginDialog },
+  inject: ['getCart', 'addToCart', 'getFavorites', 'removeFromFavorites', 'orderService'],
   emits: ['toggle-sidebar', 'update:search'],
-  inject: ['getCart', 'addToCart', 'getUser', 'setUser'],
   props: {
     cartCount: { type: Number, default: 0 },
     search: { type: String, default: '' },
@@ -143,22 +202,59 @@ export default {
   data() {
     return {
       cartDrawer: false,
+      favDrawer: false,
       snackbar: false,
       snackbarText: '',
+      orderLoading: false,
+      isLoggedIn: false,
+      userName: '',
+      userRole: '',
+      userId: null,
     };
   },
   computed: {
-    currentUser() {
-      return this.getUser();
-    },
     cartItems() {
       return this.getCart();
+    },
+    favoriteItems() {
+      return this.getFavorites();
+    },
+    favoritesCount() {
+      return this.favoriteItems.length;
     },
     totalPrice() {
       return this.cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
     },
   },
+  mounted() {
+    this.checkAuth();
+  },
   methods: {
+    checkAuth() {
+      const name = sessionStorage.getItem('userName');
+      const role = sessionStorage.getItem('userRole');
+      const id = sessionStorage.getItem('userId');
+      if (name) {
+        this.isLoggedIn = true;
+        this.userName = name;
+        this.userRole = role || 'client';
+        this.userId = id;
+      }
+    },
+    onLoginSuccess({ userName, role, userId }) {
+      this.isLoggedIn = true;
+      this.userName = userName;
+      this.userRole = role;
+      this.userId = userId;
+    },
+    logout() {
+      sessionStorage.clear();
+      this.isLoggedIn = false;
+      this.userName = '';
+      this.userRole = '';
+      this.userId = null;
+      this.$router.push('/');
+    },
     onSearch(val) {
       this.$emit('update:search', val);
       if (val && this.$route.path !== '/shop') {
@@ -169,9 +265,7 @@ export default {
       this.$emit('update:search', '');
     },
     goToShop() {
-      if (this.$route.path !== '/shop') {
-        this.$router.push('/shop');
-      }
+      if (this.$route.path !== '/shop') this.$router.push('/shop');
     },
     removeFromCart(id) {
       const cart = this.getCart();
@@ -182,44 +276,40 @@ export default {
       const cart = this.getCart();
       cart.splice(0, cart.length);
     },
+    addToCartFromFav(item) {
+      this.addToCart(item, 1);
+      this.snackbarText = `«${item.name}» добавлен в корзину`;
+      this.snackbar = true;
+    },
+    removeFav(id) {
+      this.removeFromFavorites(id);
+    },
     async placeOrder() {
-      const user = this.getUser();
-      if (!user) return;
+      if (!this.isLoggedIn) {
+        this.$refs.loginDialog.open();
+        return;
+      }
       const cart = this.getCart();
       if (cart.length === 0) return;
 
+      this.orderLoading = true;
       try {
-        const res = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: user.id,
-            userName: user.name,
-            items: cart.map(i => ({
-              id: i.id,
-              name: i.name,
-              price: i.price,
-              qty: i.qty,
-            })),
-            total: cart.reduce((sum, i) => sum + i.price * i.qty, 0),
-          }),
+        await this.orderService.createOrder({
+          userId: this.userId,
+          userName: this.userName,
+          items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+          total: this.totalPrice,
         });
-
-        if (res.ok) {
-          this.clearCart();
-          this.cartDrawer = false;
-          this.snackbarText = 'Заказ оформлен!';
-          this.snackbar = true;
-        }
+        this.clearCart();
+        this.cartDrawer = false;
+        this.snackbarText = 'Заказ оформлен!';
+        this.snackbar = true;
       } catch (e) {
         this.snackbarText = 'Ошибка при оформлении заказа';
         this.snackbar = true;
+      } finally {
+        this.orderLoading = false;
       }
-    },
-    logout() {
-      this.setUser(null);
-      localStorage.removeItem('zooUser');
-      this.$router.push('/login');
     },
   },
 };

@@ -5,7 +5,6 @@
       <h2 class="text-h5 font-weight-bold">Акции</h2>
     </div>
 
-    <!-- Баннеры акций -->
     <v-row class="mb-6">
       <v-col v-for="promo in promos" :key="promo.id" cols="12" sm="6" md="4">
         <v-card :color="promo.color" rounded="lg" class="pa-4" flat>
@@ -21,7 +20,6 @@
       </v-col>
     </v-row>
 
-    <!-- Товары со скидкой -->
     <h3 class="text-h6 font-weight-bold mb-4">Товары по акции</h3>
     <v-row>
       <v-col
@@ -108,7 +106,6 @@ export default {
           until: '1 июня',
         },
       ],
-      // берём первые 8 товаров и добавляем им скидку
       saleProducts: allProducts.slice(0, 8).map((p, i) => ({
         ...p,
         discount: [10, 15, 20, 25][i % 4],

@@ -7,6 +7,12 @@ export default defineConfig({
   server: {
     port: 3020,
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3021',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: path.resolve(__dirname, '../dist'),

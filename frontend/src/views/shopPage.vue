@@ -42,10 +42,18 @@
             <div class="text-body-2 text-grey-darken-1 mb-2">{{ product.description }}</div>
             <div class="text-h6 font-weight-bold" style="color: #ff8c00">{{ product.price }} ₽</div>
           </v-card-text>
-          <v-card-actions class="pt-0 pb-3">
-            <v-btn color="#FF8C00" variant="flat" block @click.stop="addToCartLocal(product)">
-              <v-icon left>mdi-cart-plus</v-icon>
+          <v-card-actions class="pt-0 pb-3 d-flex" style="gap: 8px;">
+            <v-btn color="#FF8C00" variant="flat" style="flex:1" @click.stop="addToCartLocal(product)">
+              <v-icon start>mdi-cart-plus</v-icon>
               В корзину
+            </v-btn>
+            <v-btn
+              :color="isFavorite(product.id) ? 'red' : 'grey'"
+              variant="tonal"
+              icon
+              @click.stop="toggleFavorite(product)"
+            >
+              <v-icon size="18">{{ isFavorite(product.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -92,12 +100,18 @@
                 Итого: <span class="font-weight-bold text-black">{{ selectedProduct.price * qty }} ₽</span>
               </div>
               <v-btn color="#FF8C00" variant="flat" block size="large" class="mb-2" @click="addToCartFromDialog">
-                <v-icon left>mdi-cart-plus</v-icon>
+                <v-icon start>mdi-cart-plus</v-icon>
                 В корзину
               </v-btn>
-              <v-btn variant="outlined" color="#FF8C00" block size="large">
-                <v-icon left>mdi-heart-outline</v-icon>
-                В избранное
+              <v-btn
+                :color="isFavorite(selectedProduct.id) ? 'red' : '#FF8C00'"
+                variant="outlined"
+                block
+                size="large"
+                @click="toggleFavorite(selectedProduct)"
+              >
+                <v-icon start>{{ isFavorite(selectedProduct.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                {{ isFavorite(selectedProduct.id) ? 'Убрать из избранного' : 'В избранное' }}
               </v-btn>
             </v-card-text>
           </v-col>
@@ -105,17 +119,21 @@
       </v-card>
     </v-dialog>
 
-    <!-- Фильтр-панель -->
+    <!-- Панель фильтрации -->
     <v-navigation-drawer v-model="filterDrawer" location="right" temporary width="300">
       <div class="pa-4">
         <div class="d-flex align-center justify-space-between mb-4">
           <span class="text-h6 font-weight-bold">Фильтры</span>
-          <v-btn icon size="small" variant="text" @click="filterDrawer = false"><v-icon>mdi-close</v-icon></v-btn>
+          <v-btn icon size="small" variant="text" @click="filterDrawer = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
         <v-divider class="mb-4" />
+
         <div class="mb-4">
           <div class="text-subtitle-2 font-weight-bold mb-2 text-grey-darken-2">
-            <v-icon size="16" class="mr-1">mdi-tag-outline</v-icon> Категория
+            <v-icon size="16" class="mr-1">mdi-tag-outline</v-icon>
+            Категория
           </div>
           <v-btn-toggle v-model="filterCategory" color="#FF8C00" variant="tonal" divided density="compact" class="flex-wrap">
             <v-btn value="all" size="small"><v-icon size="16" start>mdi-apps</v-icon>Все</v-btn>
@@ -124,18 +142,26 @@
             <v-btn value="dog" size="small"><v-icon size="16" start>mdi-dog</v-icon>Собаки</v-btn>
           </v-btn-toggle>
         </div>
+
         <v-divider class="mb-4" />
+
         <div class="mb-4">
           <div class="text-subtitle-2 font-weight-bold mb-1 text-grey-darken-2">
-            <v-icon size="16" class="mr-1">mdi-currency-rub</v-icon> Цена: до {{ priceMax }} ₽
+            <v-icon size="16" class="mr-1">mdi-currency-rub</v-icon>
+            Цена: до {{ priceMax }} ₽
           </div>
           <v-slider v-model="priceMax" :min="100" :max="3000" :step="50" color="#FF8C00" track-color="#FFE0B2" hide-details thumb-label />
-          <div class="d-flex justify-space-between text-caption text-grey"><span>100 ₽</span><span>3 000 ₽</span></div>
+          <div class="d-flex justify-space-between text-caption text-grey">
+            <span>100 ₽</span><span>3 000 ₽</span>
+          </div>
         </div>
+
         <v-divider class="mb-4" />
+
         <div class="mb-6">
           <div class="text-subtitle-2 font-weight-bold mb-2 text-grey-darken-2">
-            <v-icon size="16" class="mr-1">mdi-sort</v-icon> Сортировка
+            <v-icon size="16" class="mr-1">mdi-sort</v-icon>
+            Сортировка
           </div>
           <v-radio-group v-model="sortBy" hide-details density="compact">
             <v-radio label="По умолчанию" value="default" color="#FF8C00" />
@@ -144,6 +170,7 @@
             <v-radio label="По названию" value="name" color="#FF8C00" />
           </v-radio-group>
         </div>
+
         <v-btn color="#FF8C00" variant="flat" block class="mb-2" @click="filterDrawer = false">Применить</v-btn>
         <v-btn variant="outlined" color="#FF8C00" block @click="resetFilters">Сбросить</v-btn>
       </div>
@@ -165,7 +192,7 @@ const CATEGORY_META = {
 
 export default {
   name: 'shopPage',
-  inject: ['getCart', 'addToCart', 'getSearch'],
+  inject: ['getCart', 'addToCart', 'getSearch', 'toggleFavorite', 'isFavorite'],
   data() {
     return {
       filterDrawer: false,
@@ -201,16 +228,15 @@ export default {
       return count;
     },
     filteredProducts() {
-      let result = [...this.allProducts];
+      // Скрытые товары не показываем
+      let result = [...this.allProducts].filter(p => !p.hidden);
 
-      // Фильтр по категории из URL
       if (this.routeCategory !== 'all') {
         result = result.filter(p => p.category === this.routeCategory);
       } else if (this.filterCategory !== 'all') {
         result = result.filter(p => p.category === this.filterCategory);
       }
 
-      // Поиск по названию
       if (this.searchQuery && this.searchQuery.trim()) {
         const q = this.searchQuery.trim().toLowerCase();
         result = result.filter(p =>
@@ -219,10 +245,8 @@ export default {
         );
       }
 
-      // Цена
       result = result.filter(p => p.price <= this.priceMax);
 
-      // Сортировка
       if (this.sortBy === 'price_asc')  result.sort((a, b) => a.price - b.price);
       if (this.sortBy === 'price_desc') result.sort((a, b) => b.price - a.price);
       if (this.sortBy === 'name')       result.sort((a, b) => a.name.localeCompare(b.name));

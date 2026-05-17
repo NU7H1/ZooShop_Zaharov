@@ -95,7 +95,7 @@ export default {
     },
     scrollToContacts() {
   document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth' });
-    },
+},
   },
 };
 </script>

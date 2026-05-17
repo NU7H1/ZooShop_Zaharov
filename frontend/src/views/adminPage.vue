@@ -16,11 +16,15 @@
       </v-tab>
     </v-tabs>
 
-    <!-- ===== ЗАКАЗЫ ===== -->
     <div v-if="tab === 'orders'">
-
-      <!-- Фильтр по статусу -->
-      <v-btn-toggle v-model="orderFilter" color="#FF8C00" variant="tonal" divided density="compact" class="mb-5 flex-wrap">
+      <v-btn-toggle
+        v-model="orderFilter"
+        color="#FF8C00"
+        variant="tonal"
+        divided
+        density="compact"
+        class="mb-5 flex-wrap"
+      >
         <v-btn value="all" size="small">Все</v-btn>
         <v-btn value="pending" size="small">Обрабатывается</v-btn>
         <v-btn value="collected" size="small">Собран</v-btn>
@@ -36,6 +40,9 @@
       <div v-else-if="filteredOrders.length === 0" class="text-center py-10">
         <v-icon size="64" color="grey-lighten-1">mdi-package-variant-closed</v-icon>
         <div class="text-body-1 text-grey mt-3">Заказов нет</div>
+        <div class="text-caption text-grey mt-1">
+          Заказы появятся здесь когда клиенты оформят их через корзину
+        </div>
       </div>
 
       <v-card
@@ -73,29 +80,26 @@
           <v-divider class="my-3" />
 
           <div class="d-flex align-center justify-space-between">
-            <span class="font-weight-bold" style="color: #FF8C00;">Итого: {{ order.total }} ₽</span>
-
-            <!-- Смена статуса -->
-            <div class="d-flex align-center" style="gap: 8px;">
-              <v-select
-                :model-value="order.status"
-                @update:model-value="updateStatus(order, $event)"
-                :items="statusOptions"
-                item-title="label"
-                item-value="value"
-                density="compact"
-                variant="outlined"
-                hide-details
-                style="max-width: 180px;"
-                color="#FF8C00"
-              />
-            </div>
+            <span class="font-weight-bold" style="color: #FF8C00;">
+              Итого: {{ order.total }} ₽
+            </span>
+            <v-select
+              :model-value="order.status"
+              @update:model-value="updateStatus(order, $event)"
+              :items="statusOptions"
+              item-title="label"
+              item-value="value"
+              density="compact"
+              variant="outlined"
+              hide-details
+              style="max-width: 200px;"
+              color="#FF8C00"
+            />
           </div>
         </v-card-text>
       </v-card>
     </div>
 
-    <!-- ===== ТОВАРЫ ===== -->
     <div v-if="tab === 'products'">
       <div v-if="loadingProducts" class="text-center py-10">
         <v-progress-circular indeterminate color="#FF8C00" />
@@ -122,6 +126,9 @@
             </v-card-title>
             <v-card-text class="flex-grow-1 py-1">
               <div class="font-weight-bold" style="color: #FF8C00;">{{ product.price }} ₽</div>
+              <v-chip v-if="product.hidden" size="x-small" color="grey" variant="tonal" class="mt-1">
+                Скрыт
+              </v-chip>
             </v-card-text>
             <v-card-actions class="pb-3">
               <v-btn
@@ -131,7 +138,9 @@
                 size="small"
                 @click="toggleVisibility(product)"
               >
-                <v-icon left size="16">{{ product.hidden ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                <v-icon start size="16">
+                  {{ product.hidden ? 'mdi-eye' : 'mdi-eye-off' }}
+                </v-icon>
                 {{ product.hidden ? 'Показать' : 'Скрыть' }}
               </v-btn>
             </v-card-actions>
@@ -140,18 +149,23 @@
       </v-row>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">{{ snackbarText }}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">
+      {{ snackbarText }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import allProducts from '../assets/products.json';
+
 export default {
   name: 'adminPage',
+  inject: ['orderService'],
   data() {
     return {
       tab: 'orders',
       orders: [],
-      products: [],
+      products: allProducts.map(p => ({ ...p, hidden: p.hidden || false })),
       orderFilter: 'all',
       loadingOrders: false,
       loadingProducts: false,
@@ -174,61 +188,44 @@ export default {
   },
   mounted() {
     this.loadOrders();
-    this.loadProducts();
   },
   methods: {
     async loadOrders() {
       this.loadingOrders = true;
       try {
-        const res = await fetch('/api/orders?role=admin');
-        this.orders = await res.json();
+        this.orders = await this.orderService.getOrders(null, 'admin');
       } catch (e) {
         console.error(e);
       } finally {
         this.loadingOrders = false;
       }
     },
-    async loadProducts() {
-      this.loadingProducts = true;
-      try {
-        const res = await fetch('/api/products');
-        this.products = await res.json();
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.loadingProducts = false;
-      }
-    },
     async updateStatus(order, newStatus) {
       try {
-        const res = await fetch(`/api/orders/${order.id}/status`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus }),
-        });
-        const updated = await res.json();
-        const idx = this.orders.findIndex(o => o.id === order.id);
-        if (idx !== -1) this.orders[idx] = updated;
+        await this.orderService.updateStatus(order.id, newStatus);
+        order.status = newStatus;
         this.snackbarText = 'Статус обновлён';
         this.snackbar = true;
       } catch (e) {
-        console.error(e);
+        this.snackbarText = 'Ошибка обновления статуса';
+        this.snackbar = true;
       }
     },
     async toggleVisibility(product) {
       try {
-        const res = await fetch(`/api/products/${product.id}/visibility`, {
+        const res = await fetch(`http://localhost:3021/api/products/${product.id}/visibility`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ hidden: !product.hidden }),
         });
         const updated = await res.json();
-        const idx = this.products.findIndex(p => p.id === product.id);
-        if (idx !== -1) this.products[idx] = updated;
+        product.hidden = updated.hidden;
         this.snackbarText = updated.hidden ? 'Товар скрыт' : 'Товар показан';
         this.snackbar = true;
       } catch (e) {
         console.error(e);
+        this.snackbarText = 'Ошибка';
+        this.snackbar = true;
       }
     },
     formatDate(iso) {

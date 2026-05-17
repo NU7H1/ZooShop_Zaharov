@@ -1,3 +1,20 @@
+<template>
+  <v-app>
+    <Navbar
+      @toggle-sidebar="drawer = !drawer"
+      :cart-count="cartItems.length"
+      v-model:search="searchQuery"
+    />
+    <Sidebar v-model:drawer="drawer" />
+    <v-main style="display: flex; flex-direction: column; min-height: 100vh;">
+      <v-container fluid style="flex: 1;">
+        <router-view />
+      </v-container>
+      <AppFooter />
+    </v-main>
+  </v-app>
+</template>
+
 <script>
 import Navbar from './src/components/UI/Navbar.vue';
 import Sidebar from './src/components/UI/Sidebar.vue';
@@ -11,8 +28,6 @@ export default {
       getCart: () => this.cartItems,
       addToCart: this.addToCart,
       getSearch: () => this.searchQuery,
-      getUser: () => this.currentUser,
-      setUser: this.setUser,
       getFavorites: () => this.favorites,
       toggleFavorite: this.toggleFavorite,
       isFavorite: (id) => this.favorites.some(f => f.id === id),
@@ -25,20 +40,7 @@ export default {
       cartItems: [],
       searchQuery: '',
       favorites: [],
-      currentUser: JSON.parse(localStorage.getItem('zooUser') || 'null'),
     };
-  },
-  watch: {
-    currentUser(val) {
-      if (!val && this.$route.path !== '/login') {
-        this.$router.push('/login');
-      }
-    },
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push('/login');
-    }
   },
   methods: {
     addToCart(product, qty = 1) {
@@ -60,14 +62,6 @@ export default {
     removeFromFavorites(id) {
       const idx = this.favorites.findIndex(f => f.id === id);
       if (idx !== -1) this.favorites.splice(idx, 1);
-    },
-    setUser(user) {
-      this.currentUser = user;
-      if (user) {
-        localStorage.setItem('zooUser', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('zooUser');
-      }
     },
   },
 };
