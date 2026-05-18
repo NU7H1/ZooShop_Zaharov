@@ -5,6 +5,7 @@ const cors = require('cors');
 const UserController = require('./server/controllers/UserController');
 const LoginController = require('./server/controllers/LoginController');
 const OrderController = require('./server/controllers/OrderController');
+const ProductController = require('./server/controllers/ProductController');
 
 const app = express();
 const port = 3021;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/users', UserController);
 app.use('/api/login', LoginController);
 app.use('/api/orders', OrderController);
+app.use('/api/products', ProductController);
 
 app.listen(port, () => {
   console.log(`Backend running at http://localhost:${port}`);

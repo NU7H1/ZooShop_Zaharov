@@ -48,6 +48,7 @@
               В корзину
             </v-btn>
             <v-btn
+              v-if="loggedIn"
               :color="isFavorite(product.id) ? 'red' : 'grey'"
               variant="tonal"
               icon
@@ -104,6 +105,7 @@
                 В корзину
               </v-btn>
               <v-btn
+                v-if="loggedIn"
                 :color="isFavorite(selectedProduct.id) ? 'red' : '#FF8C00'"
                 variant="outlined"
                 block
@@ -135,12 +137,21 @@
             <v-icon size="16" class="mr-1">mdi-tag-outline</v-icon>
             Категория
           </div>
-          <v-btn-toggle v-model="filterCategory" color="#FF8C00" variant="tonal" divided density="compact" class="flex-wrap">
-            <v-btn value="all" size="small"><v-icon size="16" start>mdi-apps</v-icon>Все</v-btn>
-            <v-btn value="common" size="small"><v-icon size="16" start>mdi-package-variant</v-icon>Общие</v-btn>
-            <v-btn value="cat" size="small"><v-icon size="16" start>mdi-cat</v-icon>Кошки</v-btn>
-            <v-btn value="dog" size="small"><v-icon size="16" start>mdi-dog</v-icon>Собаки</v-btn>
-          </v-btn-toggle>
+          <div class="category-filter-list">
+            <v-btn
+              v-for="cat in categoryFilterOptions"
+              :key="cat.value"
+              block
+              size="small"
+              class="category-filter-btn"
+              :variant="filterCategory === cat.value ? 'flat' : 'tonal'"
+              :color="filterCategory === cat.value ? '#FF8C00' : undefined"
+              @click="filterCategory = cat.value"
+            >
+              <v-icon size="16" start>{{ cat.icon }}</v-icon>
+              {{ cat.label }}
+            </v-btn>
+          </div>
         </div>
 
         <v-divider class="mb-4" />
@@ -181,8 +192,6 @@
 </template>
 
 <script>
-import allProducts from '../assets/products.json';
-
 const CATEGORY_META = {
   all:    { label: 'Магазин',      icon: 'mdi-store' },
   common: { label: 'Общие товары', icon: 'mdi-package-variant' },
@@ -192,7 +201,7 @@ const CATEGORY_META = {
 
 export default {
   name: 'shopPage',
-  inject: ['getCart', 'addToCart', 'getSearch', 'toggleFavorite', 'isFavorite'],
+  inject: ['getCart', 'addToCart', 'getSearch', 'toggleFavorite', 'isFavorite', 'isLoggedIn', 'productService'],
   data() {
     return {
       filterDrawer: false,
@@ -201,13 +210,22 @@ export default {
       sortBy: 'default',
       snackbar: false,
       snackbarText: '',
-      allProducts: allProducts,
+      allProducts: [],
+      categoryFilterOptions: [
+        { value: 'all', label: 'Все', icon: 'mdi-apps' },
+        { value: 'common', label: 'Общие', icon: 'mdi-package-variant' },
+        { value: 'cat', label: 'Кошки', icon: 'mdi-cat' },
+        { value: 'dog', label: 'Собаки', icon: 'mdi-dog' },
+      ],
       productDialog: false,
       selectedProduct: null,
       qty: 1,
     };
   },
   computed: {
+    loggedIn() {
+      return this.isLoggedIn();
+    },
     searchQuery() {
       return this.getSearch();
     },
@@ -254,6 +272,9 @@ export default {
       return result;
     },
   },
+  mounted() {
+    this.loadProducts();
+  },
   watch: {
     routeCategory(val) {
       this.filterCategory = val === 'all' ? 'all' : val;
@@ -263,6 +284,13 @@ export default {
     },
   },
   methods: {
+    async loadProducts() {
+      try {
+        this.allProducts = await this.productService.getProducts();
+      } catch (e) {
+        console.error(e);
+      }
+    },
     openProduct(product) {
       this.selectedProduct = product;
       this.qty = 1;
@@ -304,5 +332,15 @@ export default {
 .product-card:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 8px 24px rgba(255, 140, 0, 0.18) !important;
+}
+
+.category-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category-filter-btn {
+  justify-content: flex-start !important;
 }
 </style>

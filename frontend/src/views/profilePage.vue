@@ -12,9 +12,7 @@
         </v-avatar>
         <div>
           <div class="text-h6 font-weight-bold">{{ userName }}</div>
-          <v-chip size="x-small" color="#FF8C00" variant="tonal" class="mt-1">
-            {{ userRole === 'admin' ? 'Администратор' : 'Клиент' }}
-          </v-chip>
+          <v-chip size="x-small" color="#FF8C00" variant="tonal" class="mt-1">Клиент</v-chip>
         </div>
       </div>
     </v-card>
@@ -22,11 +20,11 @@
     <v-tabs v-model="tab" color="#FF8C00" class="mb-4">
       <v-tab value="orders">
         <v-icon start>mdi-package-variant</v-icon>
-        Мои заказы
+        Последние заказы
       </v-tab>
-      <v-tab value="favorites">
+      <v-tab value="wishlist">
         <v-icon start>mdi-heart</v-icon>
-        Избранное
+        Хочу купить
       </v-tab>
     </v-tabs>
 
@@ -35,13 +33,14 @@
         <v-progress-circular indeterminate color="#FF8C00" />
       </div>
 
-      <div v-else-if="orders.length === 0" class="text-center py-10">
+      <div v-else-if="recentOrders.length === 0" class="text-center py-10">
         <v-icon size="64" color="grey-lighten-1">mdi-package-variant-closed</v-icon>
         <div class="text-body-1 text-grey mt-3">Заказов пока нет</div>
+        <div class="text-caption text-grey mt-1">Оформите заказ через корзину в шапке сайта</div>
       </div>
 
       <v-card
-        v-for="order in orders"
+        v-for="order in recentOrders"
         :key="order.id"
         variant="outlined"
         rounded="lg"
@@ -52,17 +51,13 @@
           <div class="d-flex align-center justify-space-between mb-3">
             <div>
               <div class="text-body-2 font-weight-bold">Заказ #{{ order.id }}</div>
-              <div class="text-caption text-grey-darken-1">
-                {{ formatDate(order.createdAt) }}
-              </div>
+              <div class="text-caption text-grey-darken-1">{{ formatDate(order.createdAt) }}</div>
             </div>
             <v-chip :color="statusColor(order.status)" size="small" variant="tonal">
               {{ statusLabel(order.status) }}
             </v-chip>
           </div>
-
           <v-divider class="mb-3" />
-
           <div
             v-for="item in order.items"
             :key="item.id"
@@ -71,9 +66,7 @@
             <span class="text-grey-darken-1">{{ item.name }} × {{ item.qty }}</span>
             <span class="font-weight-bold">{{ item.price * item.qty }} ₽</span>
           </div>
-
           <v-divider class="my-3" />
-
           <div class="d-flex justify-space-between">
             <span class="font-weight-bold">Итого:</span>
             <span class="font-weight-bold" style="color: #FF8C00;">{{ order.total }} ₽</span>
@@ -82,23 +75,18 @@
       </v-card>
     </div>
 
-    <div v-if="tab === 'favorites'">
-      <div v-if="favorites.length === 0" class="text-center py-10">
+    <div v-if="tab === 'wishlist'">
+      <div v-if="wishlist.length === 0" class="text-center py-10">
         <v-icon size="64" color="grey-lighten-1">mdi-heart-outline</v-icon>
-        <div class="text-body-1 text-grey mt-3">Избранное пусто</div>
+        <div class="text-body-1 text-grey mt-3">Список пуст</div>
+        <div class="text-caption text-grey mt-1">Добавляйте товары в избранное в магазине</div>
       </div>
 
       <v-row>
-        <v-col
-          v-for="product in favorites"
-          :key="product.id"
-          cols="12" sm="6" md="4" lg="3"
-        >
+        <v-col v-for="product in wishlist" :key="product.id" cols="12" sm="6" md="4" lg="3">
           <v-card variant="outlined" class="h-100 d-flex flex-column" style="border-color: #ff8c00;">
             <v-img :src="product.image" height="160" cover class="bg-grey-lighten-2" />
-            <v-card-title class="text-subtitle-1 font-weight-bold pt-3 text-black">
-              {{ product.name }}
-            </v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold pt-3 text-black">{{ product.name }}</v-card-title>
             <v-card-text class="flex-grow-1">
               <div class="text-body-2 text-grey-darken-1 mb-1">{{ product.description }}</div>
               <div class="font-weight-bold" style="color: #FF8C00;">{{ product.price }} ₽</div>
@@ -117,9 +105,7 @@
       </v-row>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">
-      {{ snackbarText }}
-    </v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="2000" color="#FF8C00">{{ snackbarText }}</v-snackbar>
   </div>
 </template>
 
@@ -135,12 +121,16 @@ export default {
       snackbar: false,
       snackbarText: '',
       userName: sessionStorage.getItem('userName') || '',
-      userRole: sessionStorage.getItem('userRole') || 'client',
     };
   },
   computed: {
-    favorites() {
+    wishlist() {
       return this.getFavorites();
+    },
+    recentOrders() {
+      return [...this.orders]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 10);
     },
   },
   mounted() {
@@ -151,8 +141,7 @@ export default {
       this.loading = true;
       try {
         const userId = sessionStorage.getItem('userId');
-        const role = sessionStorage.getItem('userRole');
-        this.orders = await this.orderService.getOrders(userId, role);
+        this.orders = await this.orderService.getOrders(userId, 'client');
       } catch (e) {
         console.error(e);
       } finally {
@@ -175,19 +164,19 @@ export default {
     },
     statusLabel(status) {
       return {
-        pending:   'Обрабатывается',
+        pending: 'На обработке',
         collected: 'Собран',
-        shipped:   'Отправлен',
-        done:      'Завершён',
+        shipped: 'Отправлен',
+        done: 'Завершён',
         cancelled: 'Отменён',
       }[status] ?? status;
     },
     statusColor(status) {
       return {
-        pending:   'orange',
+        pending: 'orange',
         collected: 'blue',
-        shipped:   'purple',
-        done:      'green',
+        shipped: 'purple',
+        done: 'green',
         cancelled: 'red',
       }[status] ?? 'grey';
     },
