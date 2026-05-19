@@ -5,7 +5,7 @@
     "description": "Сухой корм с курицей, 2 кг",
     "price": 1250,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Cat+Food"
+    "image": "https://www.auchan.ru/f/c/insecure/w:620/plain/https://www.auchan.ru/files/original/36521202/"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "description": "3 шт, с кошачьей мятой",
     "price": 350,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Cat+Toy"
+    "image": "https://goods-photos.static1-sima-land.com/items/7081071/0/700.jpg?v=1673523709"
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "description": "Компактная, 45x45 см",
     "price": 2890,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Scratcher",
+    "image": "https://storage.yandexcloud.net/pim-core/dbpim-prod_59105.png",
     "hidden": true
   },
   {
@@ -30,7 +30,7 @@
     "description": "Комкующийся, 10 л",
     "price": 590,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Litter"
+    "image": "https://cdn.metro-cc.ru/ru/ru_pim_303758001001_01.png"
   },
   {
     "id": 5,
@@ -38,7 +38,7 @@
     "description": "С дверцей и фильтром",
     "price": 2150,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Litter+Box"
+    "image": "https://avatars.mds.yandex.net/i?id=8b5149b386a57e3abaa05d533172ab58_l-5232624-images-thumbs&n=13"
   },
   {
     "id": 6,
@@ -46,7 +46,7 @@
     "description": "Металлическая, с антистатиком",
     "price": 320,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Comb"
+    "image": "https://www.markvet.ru/upload/iblock/5b8/txp5g4zkn5jth6r5z1fuknjvvvcpy7xa.jpg"
   },
   {
     "id": 7,
@@ -54,7 +54,7 @@
     "description": "С ограничителем глубины",
     "price": 490,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Nail+Clipper"
+    "image": "https://main-cdn.sbermegamarket.ru/big1/hlr-system/755/566/224/511/143/2/600012001646b0.jpeg"
   },
   {
     "id": 8,
@@ -62,7 +62,7 @@
     "description": "Нейлоновая, регулируемая",
     "price": 680,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Cat+Harness"
+    "image": "https://avatars.mds.yandex.net/i?id=a7de3b0d416f882cb8d841df0ec219af_l-8356716-images-thumbs&n=13"
   },
   {
     "id": 9,
@@ -70,7 +70,7 @@
     "description": "Спрей для игрушек",
     "price": 250,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Catnip"
+    "image": "https://avatars.mds.yandex.net/get-mpic/10206808/2a0000019c0f79454905e72c509047f690fa/orig"
   },
   {
     "id": 10,
@@ -78,7 +78,7 @@
     "description": "Круглая, мягкая, 40 см",
     "price": 1350,
     "category": "cat",
-    "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Cat+Bed"
+    "image": "https://img-edg.joomcdn.net/e42778f2abf833176f1f0905585ffbea0a2e9678_original.jpeg"
   },
   {
     "id": 11,
@@ -86,7 +86,7 @@
     "description": "Сухой корм с ягнёнком, 3 кг",
     "price": 1890,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Dog+Food"
+    "image": "https://vrn.dogeat.ru/storage/products/0/800x800/royal-kanin-klab-h-e-dlya-aktivnyix-sobak-20-kg.jpg"
   },
   {
     "id": 12,
@@ -94,15 +94,15 @@
     "description": "Прорезиненный, светится в темноте",
     "price": 420,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Dog+Ball"
+    "image": "https://basket-12.wbbasket.ru/vol1888/part188879/188879089/images/big/1.webp"
   },
   {
     "id": 13,
     "name": "Шлейка для собак",
-    "description": "Регулируемая, размер M",
+    "description": "Регулируемая, для маленьких и больших собак",
     "price": 750,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Harness"
+    "image": "https://ir.ozone.ru/s3/multimedia-4/6786247324.jpg"
   },
   {
     "id": 14,
@@ -110,7 +110,7 @@
     "description": "Длина 5 м, для средних пород",
     "price": 890,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Leash"
+    "image": "https://avatars.mds.yandex.net/get-mpic/15588396/2a0000019b20bbcfeb6a9a0645b5258bddf9/orig"
   },
   {
     "id": 15,
@@ -118,7 +118,7 @@
     "description": "Нержавеющая сталь, 1,5 л",
     "price": 1200,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Bowl"
+    "image": "https://holistic-shop.ru/pictures/product/big/28122_big.jpg"
   },
   {
     "id": 16,
@@ -126,15 +126,15 @@
     "description": "Хлопок, для активных игр",
     "price": 380,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Rope+Toy"
+    "image": "https://avatars.mds.yandex.net/get-mpic/5209489/img_id3077737406450538061.jpeg/orig"
   },
   {
     "id": 17,
     "name": "Дождевик для собак",
-    "description": "Размер M, непромокаемый",
+    "description": "непромокаемый",
     "price": 950,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Raincoat"
+    "image": "https://ir.ozone.ru/s3/multimedia-9/6658504389.jpg"
   },
   {
     "id": 18,
@@ -142,7 +142,7 @@
     "description": "До 5 кг, вентиляция",
     "price": 2650,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Carrier"
+    "image": "https://catalog-cdn.detmir.st/media/hbg_5P8cm_NaWdAMnjVQ9tVBm2paG1nRI_XcckpShEg=.jpeg"
   },
   {
     "id": 19,
@@ -150,7 +150,7 @@
     "description": "Глюкозамин, 120 таблеток",
     "price": 1350,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Dog+Vitamins"
+    "image": "https://usmall.ru/image/1177/45/86/57668f1403b63f08b3d40cd231c1592c.jpeg"
   },
   {
     "id": 20,
@@ -158,7 +158,7 @@
     "description": "Мягкий силикон, не травмирует зубы",
     "price": 490,
     "category": "dog",
-    "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Frisbee"
+    "image": "https://img-edg.joomcdn.net/e9f8553f48b3ee831429e7ebc4149e0b96cc4993_original.jpeg"
   },
   {
     "id": 21,
@@ -166,7 +166,7 @@
     "description": "Биотин + таурин, 60 таблеток",
     "price": 480,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Vitamins"
+    "image": "https://cdn.mokryinos.ru/images/site/catalog/2_938_1526962661.jpeg"
   },
   {
     "id": 22,
@@ -174,7 +174,7 @@
     "description": "Таблетки для кошек и собак, 3 шт",
     "price": 320,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Dewormer"
+    "image": "https://static.zdravcity.ru/upload/iblock/6eb/photo_es_325CF50D-DB57-D948-DE06-3EB0A030AAEC.jpg"
   },
   {
     "id": 23,
@@ -182,7 +182,7 @@
     "description": "Для чувствительной кожи, 250 мл",
     "price": 590,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/FFD966/FFFFFF?text=Shampoo"
+    "image": "https://cdn.mokryinos.ru/images/site/catalog/2_68269c3452283.png"
   },
   {
     "id": 24,
@@ -190,7 +190,7 @@
     "description": "Защита от блох и клещей",
     "price": 420,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/E0E0E0/FFFFFF?text=Tick+Spray"
+    "image": "https://avatars.mds.yandex.net/get-mpic/4888456/img_id2368830571872306763.jpeg/orig"
   },
   {
     "id": 25,
@@ -198,7 +198,7 @@
     "description": "Для кошек и собак малых пород",
     "price": 390,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/FFB3BA/FFFFFF?text=Nail+Clipper"
+    "image": "https://moizver.com/upload/iblock/c76/975tdeeyzpbd0knw1k52wrno1tnajkah.png"
   },
   {
     "id": 26,
@@ -206,7 +206,7 @@
     "description": "С фильтром, 1,5 л",
     "price": 1450,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/9AD0F5/FFFFFF?text=Water+Fountain"
+    "image": "https://img-edg.joomcdn.net/bb0123b8122428a7176fdecfe40fe61eb485a0b4_original.jpeg"
   },
   {
     "id": 27,
@@ -214,7 +214,7 @@
     "description": "Интерактивный, для развития интеллекта",
     "price": 670,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/F4C2C2/FFFFFF?text=Treat+Dispenser"
+    "image": "https://ir.ozone.ru/s3/multimedia-1-o/8193312564.jpg"
   },
   {
     "id": 28,
@@ -222,7 +222,7 @@
     "description": "Двусторонняя, удаляет подшёрсток",
     "price": 530,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Brush"
+    "image": "https://avatars.mds.yandex.net/get-mpic/16418886/2a00000197d34c37baa36f4f9b54de462793/orig"
   },
   {
     "id": 29,
@@ -230,7 +230,7 @@
     "description": "С вкусом печени, 70 г",
     "price": 380,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/B0C4DE/FFFFFF?text=Toothpaste"
+    "image": "https://main-cdn.sbermegamarket.ru/big1/hlr-system/116/957/266/272/123/3/100050540829b0.jpg"
   },
   {
     "id": 30,
@@ -238,6 +238,6 @@
     "description": "10 шт, 60x60 см",
     "price": 450,
     "category": "common",
-    "image": "https://via.placeholder.com/400x300/CCE7E8/FFFFFF?text=Pads"
+    "image": "https://ir.ozone.ru/s3/multimedia-1-j/8542366147.jpg"
   }
 ]
