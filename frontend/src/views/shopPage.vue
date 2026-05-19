@@ -14,14 +14,12 @@
       </v-btn>
     </div>
 
-    <!-- Нет результатов -->
     <div v-if="filteredProducts.length === 0" class="text-center py-16">
       <v-icon size="72" color="grey-lighten-1">mdi-magnify-close</v-icon>
       <div class="text-h6 text-grey mt-3">Ничего не найдено</div>
       <div class="text-body-2 text-grey-darken-1 mt-1">Попробуйте изменить запрос или фильтры</div>
     </div>
 
-    <!-- Сетка товаров -->
     <v-row>
       <v-col
         v-for="product in filteredProducts"
@@ -61,7 +59,6 @@
       </v-col>
     </v-row>
 
-    <!-- Модалка товара -->
     <v-dialog v-model="productDialog" max-width="700" scrollable>
       <v-card v-if="selectedProduct" rounded="xl">
         <v-btn icon variant="text" style="position:absolute;top:12px;right:12px;z-index:10;" @click="productDialog = false">
@@ -121,7 +118,6 @@
       </v-card>
     </v-dialog>
 
-    <!-- Панель фильтрации -->
     <v-navigation-drawer v-model="filterDrawer" location="right" temporary width="300">
       <div class="pa-4">
         <div class="d-flex align-center justify-space-between mb-4">
@@ -246,7 +242,6 @@ export default {
       return count;
     },
     filteredProducts() {
-      // Скрытые товары не показываем
       let result = [...this.allProducts].filter(p => !p.hidden);
 
       if (this.routeCategory !== 'all') {

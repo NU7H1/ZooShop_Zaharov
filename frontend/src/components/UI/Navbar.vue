@@ -26,7 +26,6 @@
       @keydown.enter="goToShop"
     />
 
-    <!-- Избранное (только для авторизованных) -->
     <v-menu
       v-if="isLoggedIn"
       v-model="favMenu"
@@ -83,7 +82,6 @@
       </v-card>
     </v-menu>
 
-    <!-- Корзина -->
     <v-menu
       v-model="cartMenu"
       :close-on-content-click="false"
@@ -159,7 +157,6 @@
       </v-card>
     </v-menu>
 
-    <!-- Меню пользователя -->
     <div v-if="isLoggedIn">
       <v-menu>
         <template v-slot:activator="{ props }">

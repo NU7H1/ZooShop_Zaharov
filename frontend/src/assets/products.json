@@ -13,7 +13,8 @@
     "description": "3 шт, с кошачьей мятой",
     "price": 350,
     "category": "cat",
-    "image": "https://goods-photos.static1-sima-land.com/items/7081071/0/700.jpg?v=1673523709"
+    "image": "https://goods-photos.static1-sima-land.com/items/7081071/0/700.jpg?v=1673523709",
+    "hidden": true
   },
   {
     "id": 3,
