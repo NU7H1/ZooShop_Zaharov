@@ -6,7 +6,7 @@
     color="#FFFFFF"
   >
     <v-list nav dense>
-      <v-list-subheader class="text-black">Навигация</v-list-subheader>
+      <v-list-subheader class="text-black">Меню</v-list-subheader>
 
       <v-list-item
         prepend-icon="mdi-home-outline"

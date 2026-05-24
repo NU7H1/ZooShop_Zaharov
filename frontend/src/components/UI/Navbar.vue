@@ -1,14 +1,11 @@
 <template>
   <v-app-bar color="#000000" dark flat app elevation="2">
     <v-app-bar-nav-icon @click="$emit('toggle-sidebar')" />
-
     <div class="d-flex align-center">
       <v-icon color="#FF8C00">mdi-store</v-icon>
       <v-toolbar-title class="ml-2 text-white">ЗооМаркет</v-toolbar-title>
     </div>
-
     <v-spacer />
-
     <v-text-field
       :model-value="search"
       @update:model-value="onSearch"
@@ -30,7 +27,8 @@
       v-if="isLoggedIn"
       v-model="favMenu"
       :close-on-content-click="false"
-      location="bottom end"
+      :close-on-back="!productDialog"
+      location="bottom start"
       offset="8"
       max-width="360"
     >
@@ -69,6 +67,9 @@
                 <div class="text-body-2 font-weight-bold" style="color: #FF8C00">{{ item.price }} ₽</div>
               </div>
               <div class="d-flex flex-column" style="gap: 4px;">
+                <v-btn icon size="x-small" variant="text" color="grey" @click="openProduct(item)">
+                  <v-icon size="16">mdi-arrow-expand</v-icon>
+                </v-btn>
                 <v-btn icon size="x-small" variant="text" color="#FF8C00" @click="addToCartFromFav(item)">
                   <v-icon size="16">mdi-cart-plus</v-icon>
                 </v-btn>
@@ -81,6 +82,80 @@
         </v-card-text>
       </v-card>
     </v-menu>
+
+    <v-dialog
+      v-model="productDialog"
+      max-width="700"
+      scrollable
+      :scrim="false"
+      @after-leave="onDialogClose"
+    >
+      <v-card v-if="selectedProduct" rounded="xl">
+        <v-btn
+          icon
+          variant="text"
+          style="position:absolute;top:12px;right:12px;z-index:10;"
+          @click="productDialog = false"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-row no-gutters>
+          <v-col cols="12" sm="5">
+            <v-img
+              :src="selectedProduct.image"
+              height="320"
+              cover
+              style="border-radius: 24px 0 0 24px;"
+            />
+          </v-col>
+          <v-col cols="12" sm="7">
+            <v-card-text class="pa-6">
+              <h2 class="text-h5 font-weight-bold text-black mb-2">{{ selectedProduct.name }}</h2>
+              <p class="text-body-1 text-grey-darken-1 mb-4">{{ selectedProduct.description }}</p>
+              <v-divider class="mb-4" />
+              <div class="text-h4 font-weight-bold mb-5" style="color: #FF8C00">
+                {{ selectedProduct.price }} ₽
+              </div>
+              <div class="d-flex align-center mb-5">
+                <span class="text-body-2 text-grey-darken-1 mr-4">Количество:</span>
+                <v-btn icon size="small" variant="outlined" color="#FF8C00" @click="qty > 1 && qty--">
+                  <v-icon>mdi-minus</v-icon>
+                </v-btn>
+                <span class="mx-4 text-h6 font-weight-bold">{{ qty }}</span>
+                <v-btn icon size="small" variant="outlined" color="#FF8C00" @click="qty++">
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </div>
+              <div class="text-body-2 text-grey-darken-1 mb-5">
+                Итого:
+                <span class="font-weight-bold text-black">{{ selectedProduct.price * qty }} ₽</span>
+              </div>
+              <v-btn
+                color="#FF8C00"
+                variant="flat"
+                block
+                size="large"
+                class="mb-2"
+                @click="addToCartFromDialog"
+              >
+                <v-icon start>mdi-cart-plus</v-icon>
+                В корзину
+              </v-btn>
+              <v-btn
+                color="red"
+                variant="outlined"
+                block
+                size="large"
+                @click="removeFav(selectedProduct.id); productDialog = false"
+              >
+                <v-icon start>mdi-heart-off</v-icon>
+                Убрать из избранного
+              </v-btn>
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
 
     <v-menu
       v-model="cartMenu"
@@ -130,14 +205,11 @@
                 <v-icon size="16">mdi-close</v-icon>
               </v-btn>
             </div>
-
             <v-divider class="my-3" />
-
             <div class="d-flex justify-space-between align-center mb-3">
               <span class="text-body-1 font-weight-bold">Итого:</span>
               <span class="text-h6 font-weight-bold" style="color: #FF8C00">{{ totalPrice }} ₽</span>
             </div>
-
             <v-btn
               color="#FF8C00"
               variant="flat"
@@ -181,14 +253,12 @@
         </v-list>
       </v-menu>
     </div>
-
     <v-btn v-else variant="text" class="text-white" @click="$refs.loginDialog.open()">
       <v-icon left>mdi-login</v-icon>
       Войти
     </v-btn>
 
     <LoginDialog ref="loginDialog" @login-success="onLoginSuccess" />
-
     <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" color="#FF8C00" multi-line>
       {{ snackbarText }}
     </v-snackbar>
@@ -219,6 +289,9 @@ export default {
       userName: '',
       userRole: '',
       userId: null,
+      productDialog: false,
+      selectedProduct: null,
+      qty: 1,
     };
   },
   computed: {
@@ -306,6 +379,25 @@ export default {
     removeFav(id) {
       this.removeFromFavorites(id);
     },
+
+    onDialogClose() {
+      this.qty = 1;
+    },
+
+    openProduct(item) {
+      this.selectedProduct = item;
+      this.qty = 1;
+      this.productDialog = true;
+    },
+
+    addToCartFromDialog() {
+      this.addToCart(this.selectedProduct, this.qty);
+      this.snackbarText = `«${this.selectedProduct.name}» × ${this.qty} добавлено в корзину`;
+      this.snackbarTimeout = 2000;
+      this.snackbar = true;
+      this.productDialog = false;
+    },
+
     async placeOrder() {
       if (!this.isLoggedIn) {
         this.cartMenu = false;
@@ -314,7 +406,6 @@ export default {
       }
       const cart = this.getCart();
       if (cart.length === 0) return;
-
       this.orderLoading = true;
       try {
         await this.orderService.createOrder({
@@ -346,12 +437,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 .popup-panel__body {
   overflow-y: auto;
   max-height: calc(70vh - 64px);
 }
-
 .popup-item {
   border: 1px solid #FFE0B2;
 }
